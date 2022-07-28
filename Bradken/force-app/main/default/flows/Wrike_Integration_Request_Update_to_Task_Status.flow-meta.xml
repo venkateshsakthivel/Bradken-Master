@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <assignments>
+        <name>Trigger_Wrike_Task_Update</name>
+        <label>Trigger Wrike Task Update</label>
+        <locationX>176</locationX>
+        <locationY>398</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Opportunity_Details.Trigger_Wrike_Task_API__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Opportunity</targetReference>
+        </connector>
+    </assignments>
+    <description>Confirmation screen to confirm the trigger to retrieve a Wrike Task Status update. Called via a button on the Opportunity.</description>
+    <formulas>
+        <description>Converts the API name back to the value for display purposes</description>
+        <name>WrikeTaskStatusValue</name>
+        <dataType>String</dataType>
+        <expression>CASE(TEXT({!Get_Opportunity_Details.Wrike_Task_Status__c}),
+&quot;IEACEUCHJMAAAAAA&quot;, &quot;New&quot;,
+&quot;IEACEUCHJMAQIDSC&quot;, &quot;Requested&quot;,
+&quot;IEACEUCHJMATQ6Z4&quot;, &quot;Allocated&quot;,
+&quot;IEACEUCHJMATQ62G&quot;, &quot;In progress&quot;,
+&quot;IEACEUCHJMATQ62Q&quot;, &quot;Waiting on others&quot;,
+&quot;IEACEUCHJMBSB626&quot;, &quot;Awaiting Drawing Approvals&quot;,
+&quot;IEACEUCHJMBV53QK&quot;, &quot;Submitted Team Centre W/Flow&quot;,
+&quot;IEACEUCHJMAAAAAB&quot;, &quot;Completed&quot;,
+&quot;IEACEUCHJMAAAAAC&quot;, &quot;On Hold&quot;,
+&quot;IEACEUCHJMAAAAAD&quot;, &quot;Cancelled&quot;,
+&quot;&quot;)</expression>
+    </formulas>
+    <interviewLabel>Wrike Integration - Request Update to Task Status {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Wrike Integration - Request Update to Task Status</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_Opportunity_Details</name>
+        <label>Get Opportunity Details</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Request_Wrike_Task_Update</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Wrike_Task_Title__c</queriedFields>
+        <queriedFields>Wrike_Task_URL__c</queriedFields>
+        <queriedFields>Wrike_Task_Status__c</queriedFields>
+        <queriedFields>Wrike_Last_Updated_Date__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Opportunity</name>
+        <label>Update Opportunity</label>
+        <locationX>176</locationX>
+        <locationY>518</locationY>
+        <inputReference>Get_Opportunity_Details</inputReference>
+    </recordUpdates>
+    <screens>
+        <name>Request_Wrike_Task_Update</name>
+        <label>Request Wrike Task Update</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Trigger_Wrike_Task_Update</targetReference>
+        </connector>
+        <fields>
+            <name>Request_Help_Text</name>
+            <fieldText>&lt;p&gt;Confirmation that you are requesting a task status update for Wrike Task:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Task Title: &lt;/b&gt;{!Get_Opportunity_Details.Wrike_Task_Title__c}&lt;/p&gt;&lt;p&gt;&lt;b&gt;Last Updated Date: &lt;/b&gt;{!Get_Opportunity_Details.Wrike_Last_Updated_Date__c}&lt;/p&gt;&lt;p&gt;&lt;b&gt;Status: &lt;/b&gt;{!WrikeTaskStatusValue}&lt;/p&gt;&lt;p&gt;&lt;b&gt;URL: &lt;/b&gt;&lt;a href=&quot;{!Get_Opportunity_Details.Wrike_Task_URL__c}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!Get_Opportunity_Details.Wrike_Task_URL__c}&lt;/a&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Submit</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Opportunity_Details</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

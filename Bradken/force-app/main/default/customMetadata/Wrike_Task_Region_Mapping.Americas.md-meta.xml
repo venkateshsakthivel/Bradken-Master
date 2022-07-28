@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Americas</label>
+    <protected>false</protected>
+    <values>
+        <field>Responsible_Contact_ID_1__c</field>
+        <value xsi:type="xsd:string">KUAG46G5</value>
+    </values>
+    <values>
+        <field>Responsible_Contact_ID_2__c</field>
+        <value xsi:type="xsd:string">KUALPHEW</value>
+    </values>
+    <values>
+        <field>Responsible_Contact_ID_3__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Responsible_Contact_Name_1__c</field>
+        <value xsi:type="xsd:string">Gabrielle Sumner</value>
+    </values>
+    <values>
+        <field>Responsible_Contact_Name_2__c</field>
+        <value xsi:type="xsd:string">FullCRM</value>
+    </values>
+    <values>
+        <field>Responsible_Contact_Name_3__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Wrike_Project_Folder_ID__c</field>
+        <value xsi:type="xsd:string">IEACEUCHI4XXDODL</value>
+    </values>
+    <values>
+        <field>Wrike_Project_Title__c</field>
+        <value xsi:type="xsd:string">Min Pro Americas</value>
+    </values>
+    <values>
+        <field>Wrike_Region__c</field>
+        <value xsi:type="xsd:string">Americas</value>
+    </values>
+</CustomMetadata>

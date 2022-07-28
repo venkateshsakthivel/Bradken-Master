@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_for_Work__c</fullName>
+    <description>Integrated with Wrike via Jitterbit</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Please provide any background information about this job, why is it needed etc.</inlineHelpText>
+    <label>Reason for Work?</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>New_Account_expecting_PO</fullName>
+        <ccEmails>read@bradken.com.au</ccEmails>
+        <description>New Account expecting PO</description>
+        <protected>false</protected>
+        <senderType>CurrentUser</senderType>
+        <template>Account_Emails/New_Account_Expecting_PO</template>
+    </alerts>
+    <outboundMessages>
+        <fullName>Wrike_Task_Creation_to_Jitterbit</fullName>
+        <apiVersion>54.0</apiVersion>
+        <description>Sends outbound payload of Wrike required data to a Jitterbit endpoint to create a Wrike Task. Trigger via flow.</description>
+        <endpointUrl>https://Bradken3115.jitterbit.cc/DevLocalAgent/0.1/createWrikeTask</endpointUrl>
+        <fields>Id</fields>
+        <fields>MinPro_Product_Line__c</fields>
+        <fields>Requested_By_Date__c</fields>
+        <fields>Requested_Date__c</fields>
+        <fields>Wrike_Project_Folder_ID__c</fields>
+        <fields>Wrike_Task_API_ID__c</fields>
+        <fields>Wrike_Task_Description__c</fields>
+        <fields>Wrike_Task_Responsibles__c</fields>
+        <fields>Wrike_Task_Title__c</fields>
+        <includeSessionId>true</includeSessionId>
+        <integrationUser>salesforceprocessing@bradken.com</integrationUser>
+        <name>Wrike Task Creation to Jitterbit</name>
+        <protected>false</protected>
+        <useDeadLetterQueue>false</useDeadLetterQueue>
+    </outboundMessages>
+</Workflow>

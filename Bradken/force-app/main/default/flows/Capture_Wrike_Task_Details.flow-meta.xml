@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>54.0</apiVersion>
+    <description>Captures Wrike Task details to be used to create a Wrike Task through Jitterbit integration</description>
+    <dynamicChoiceSets>
+        <name>MinProProductLine</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>MinPro_Product_Line__c</picklistField>
+        <picklistObject>Opportunity</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Priority</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Priority__c</picklistField>
+        <picklistObject>Opportunity</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>WrikeRegion</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Wrike_Region__c</picklistField>
+        <picklistObject>Opportunity</picklistObject>
+    </dynamicChoiceSets>
+    <formulas>
+        <name>WrikeTaskResponsibles</name>
+        <dataType>String</dataType>
+        <expression>IF(
+AND(
+NOT(ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_1__c})),
+ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_2__c}),
+ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_3__c})
+),&apos; { &apos;+ {!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_1__c} +&apos; }&apos;,
+IF(
+AND(
+NOT(ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_1__c})),
+NOT(ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_2__c})),
+ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_3__c})
+),&apos;{&apos;+{!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_1__c}+&apos;,&apos;+{!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_2__c}+&apos;}&apos;,
+IF(
+AND(
+NOT(ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_1__c})),
+NOT(ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_2__c})),
+NOT(ISBLANK({!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_3__c})) 
+),&apos;{&apos;+{!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_1__c}+&apos;,&apos;+{!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_2__c}+&apos;,&apos;+{!Get_CMDT_Wrike_Control_Record.Responsible_Contact_ID_3__c}+&apos;}&apos;,
+&quot;&quot;)))</expression>
+    </formulas>
+    <interviewLabel>Capture Wrike Task Details {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Wrike Integration - Capture Wrike Task Details</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_CMDT_Wrike_Control_Record</name>
+        <label>Get CMDT Wrike Control Record</label>
+        <locationX>478</locationX>
+        <locationY>347</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Opportunity</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Wrike_Region__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Region</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Wrike_Task_Region_Mapping__mdt</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Opportunity</name>
+        <label>Update Opportunity</label>
+        <locationX>843</locationX>
+        <locationY>482</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>Customer.recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Amount</field>
+            <value>
+                <elementReference>Value_of_current_sales_order</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Based_on_Existing_Drawings__c</field>
+            <value>
+                <elementReference>Is_this_based_on_existing_drawings</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Benefit_Obtained__c</field>
+            <value>
+                <elementReference>What_benefit_will_Bradken_obtain_from_doing_this_work</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Machine_Size_Equipment_Designation__c</field>
+            <value>
+                <elementReference>Machine_Size_Equipment_Designation</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MinPro_Product_Line__c</field>
+            <value>
+                <elementReference>MinPro_Product_Line</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority__c</field>
+            <value>
+                <elementReference>Priority_List</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Reason_for_Work__c</field>
+            <value>
+                <elementReference>Reason_for_work</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Requested_By_Date__c</field>
+            <value>
+                <elementReference>Requested_By_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Requested_Date__c</field>
+            <value>
+                <elementReference>Requested_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Scope_of_Work__c</field>
+            <value>
+                <elementReference>Scope_of_Work</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Trigger_Wrike_Task_API__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Wrike_Project_Folder_ID__c</field>
+            <value>
+                <elementReference>Get_CMDT_Wrike_Control_Record.Wrike_Project_Folder_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Wrike_Region__c</field>
+            <value>
+                <elementReference>Region</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Wrike_Task_Description__c</field>
+            <value>
+                <elementReference>WrikeTaskDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Wrike_Task_Responsibles__c</field>
+            <value>
+                <elementReference>WrikeTaskResponsibles</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Wrike_Task_Status__c</field>
+            <value>
+                <stringValue>IEACEUCHJMAAAAAA</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Wrike_Task_Title__c</field>
+            <value>
+                <elementReference>Task_Title</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <screens>
+        <name>Create_Wrike_Task</name>
+        <label>Create Wrike Task</label>
+        <locationX>776</locationX>
+        <locationY>215</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_CMDT_Wrike_Control_Record</targetReference>
+        </connector>
+        <fields>
+            <name>Create_Wrike_Task_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Create_Wrike_Task_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Region</name>
+                    <choiceReferences>WrikeRegion</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Region</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Task_Title</name>
+                    <dataType>String</dataType>
+                    <fieldText>Task Title</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Customer</name>
+                    <extensionName>flowruntime:lookup</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>fieldApiName</name>
+                        <value>
+                            <stringValue>AccountId</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>label</name>
+                        <value>
+                            <stringValue>Customer</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>objectApiName</name>
+                        <value>
+                            <stringValue>Opportunity</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>recordId</name>
+                        <value>
+                            <elementReference>recordId.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Create_Wrike_Task_Section1_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Requested_Date</name>
+                    <dataType>Date</dataType>
+                    <defaultValue>
+                        <elementReference>$Flow.CurrentDate</elementReference>
+                    </defaultValue>
+                    <fieldText>Requested Date</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <helpText>&lt;p&gt;Is the start date of the Wrike task&lt;/p&gt;</helpText>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Requested_By_Date</name>
+                    <dataType>Date</dataType>
+                    <fieldText>Requested By Date</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <helpText>&lt;p&gt;&lt;span style=&quot;font-size: 11.36px; font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0);&quot;&gt;Is the end date of the Wrike task&lt;/span&gt;&lt;/p&gt;</helpText>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>MinPro_Product_Line</name>
+            <choiceReferences>MinProProductLine</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>MinPro Product Line</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Machine_Size_Equipment_Designation</name>
+            <fieldText>Machine Size/Equipment Designation</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <helpText>&lt;p&gt;&lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;What machine is this for, e.g. 40&apos; SAG Mill, CV201 Deflector etc?&lt;/span&gt;&lt;/p&gt;</helpText>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Priority_List</name>
+            <choiceReferences>Priority</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Priority</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <helpText>&lt;p&gt;Is a current quote in progress that relates to this work or has an order been received in relation to it.&lt;/p&gt;</helpText>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Is_this_based_on_existing_drawings</name>
+            <fieldText>Is this based on existing drawings?</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <helpText>&lt;p&gt;&lt;span style=&quot;font-size: 11.36px; font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0);&quot;&gt;Please list any drawings this work is based on.&lt;/span&gt;&lt;/p&gt;</helpText>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>What_benefit_will_Bradken_obtain_from_doing_this_work</name>
+            <fieldText>What benefit will Bradken obtain from doing this work?</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Value_of_current_sales_order</name>
+            <dataType>Currency</dataType>
+            <defaultValue>
+                <elementReference>recordId.Amount</elementReference>
+            </defaultValue>
+            <fieldText>Value of current sales order</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>false</isRequired>
+            <scale>0</scale>
+        </fields>
+        <fields>
+            <name>Reason_for_work</name>
+            <fieldText>Reason for work?</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <helpText>&lt;p&gt;Please provide any background information about this job, why is it needed etc.&lt;/p&gt;</helpText>
+            <isRequired>false</isRequired>
+        </fields>
+        <fields>
+            <name>Scope_of_Work</name>
+            <fieldText>Scope of Work?</fieldText>
+            <fieldType>LargeTextArea</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <nextOrFinishButtonLabel>Submit</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>650</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Create_Wrike_Task</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <textTemplates>
+        <name>WrikeTaskDescription</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;b&gt;Requested By:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!recordId.Opportunity_Owner_Name__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Customer:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!recordId.Account_Name_Text__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Product Line:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!MinPro_Product_Line}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Machine Size/Equipment Designation:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Machine_Size_Equipment_Designation}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Priority:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Priority_List}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Is this based on existing drawings?:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Is_this_based_on_existing_drawings}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;What benefit will Bradken obtain from doing this work?:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!What_benefit_will_Bradken_obtain_from_doing_this_work}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Value of current Sales order?:&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Value_of_current_sales_order}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Reason for work?&lt;/b&gt;&lt;/p&gt;&lt;p&gt;{!Reason_for_work}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Scope of work?&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;{!Scope_of_Work}&lt;/span&gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>recordId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+</Flow>

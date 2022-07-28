@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Balls &amp; Rings, Industrial and Rail Produ</label>
+    <protected>false</protected>
+    <values>
+        <field>Product_Group__c</field>
+        <value xsi:type="xsd:string">Balls &amp; Rings, Industrial and Rail Products</value>
+    </values>
+    <values>
+        <field>Product_Manager_Name__c</field>
+        <value xsi:type="xsd:string">Simon Donnelly</value>
+    </values>
+    <values>
+        <field>Product_Manager_User_ID__c</field>
+        <value xsi:type="xsd:string">0050o00000Y0me8</value>
+    </values>
+</CustomMetadata>
